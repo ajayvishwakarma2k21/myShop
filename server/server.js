@@ -16,8 +16,22 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
+const allowedOrigins = [
+  'https://alka-shop.vercel.app',
+  'http://localhost:5173',
+  process.env.FRONTEND_URL
+].filter(Boolean);
+
 app.use(cors({
-  origin: ['https://alka-shop.vercel.app', 'http://localhost:5173'],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 app.use(express.json());
@@ -31,8 +45,17 @@ cloudinary.config({
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('MongoDB successfully connected'))
-  .catch(err => console.error('MongoDB connection error:', err));
+  .then(() => {
+    console.log('MongoDB successfully connected');
+    console.log('Connected to Database:', mongoose.connection.name);
+  })
+  .catch(err => {
+    console.error('CRITICAL: MongoDB connection error!');
+    console.error('Error Details:', err.message);
+    if (process.env.MONGODB_URI?.includes('localhost')) {
+      console.warn('WARNING: You are trying to connect to localhost on a remote server. This will only work for local development.');
+    }
+  });
 
 // Routes
 app.use('/api/products', productRoutes);

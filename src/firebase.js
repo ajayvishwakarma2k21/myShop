@@ -3,15 +3,17 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
+// Helper to strip accidental quotes from environment variables
+const clean = (val) => val ? val.replace(/^["'](.+)["']$/, '$1') : val;
+
 // Replace with your Firebase project configuration
-// To get these, create a Firebase project, add a web app, and copy the config here.
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyDummyKeyForDevelopmentPurposes",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "your-project.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "your-project",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "your-project.appspot.com",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "123456789",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:123456789:web:dummy123"
+  apiKey: clean(import.meta.env.VITE_FIREBASE_API_KEY) || "AIzaSyDummyKeyForDevelopmentPurposes",
+  authDomain: clean(import.meta.env.VITE_FIREBASE_AUTH_DOMAIN) || "your-project.firebaseapp.com",
+  projectId: clean(import.meta.env.VITE_FIREBASE_PROJECT_ID) || "your-project",
+  storageBucket: clean(import.meta.env.VITE_FIREBASE_STORAGE_BUCKET) || "your-project.appspot.com",
+  messagingSenderId: clean(import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID) || "123456789",
+  appId: clean(import.meta.env.VITE_FIREBASE_APP_ID) || "1:123456789:web:dummy123"
 };
 
 // Initialize Firebase
@@ -28,7 +30,13 @@ export const signInWithGoogle = async () => {
     const result = await signInWithPopup(auth, googleProvider);
     return result.user;
   } catch (error) {
-    console.error("Error signing in with Google", error);
+    console.error("Firebase Auth Error:", error.code);
+    console.error("Error Message:", error.message);
+    
+    if (error.code === 'auth/unauthorized-domain') {
+      console.error("CRITICAL: This domain is not authorized in Firebase. Please add it to 'Authorized Domains' in Firebase Console.");
+    }
+    
     throw error;
   }
 };

@@ -4,8 +4,8 @@ const DataContext = createContext();
 
 export const useData = () => useContext(DataContext);
 
-// Set your backend API URL here
-const API_URL = 'http://localhost:5000/api/products';
+// Set your backend API URL here using Vite environment variables
+const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api/products';
 
 export const DataProvider = ({ children }) => {
   const [products, setProducts] = useState([]);

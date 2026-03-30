@@ -23,13 +23,15 @@ router.get('/', async (req, res) => {
 });
 
 // @route   POST /api/products
-// @desc    Create a product with image upload
+// @desc    Create a product with image upload or direct URL
 router.post('/', upload.single('image'), async (req, res) => {
   try {
-    const { name, description, price } = req.body;
-    let imageUrl = '';
+    const { name, description, price, imageUrl: bodyImageUrl } = req.body;
+    let finalImageUrl = bodyImageUrl || '';
 
+    // If a file was uploaded, prioritize Cloudinary
     if (req.file) {
+      console.log('Incoming file upload for:', name);
       // Helper function to upload to Cloudinary via stream
       const uploadFromBuffer = (fileBuffer) => {
         return new Promise((resolve, reject) => {
@@ -37,8 +39,10 @@ router.post('/', upload.single('image'), async (req, res) => {
             { folder: 'shop_products' },
             (error, result) => {
               if (result) {
+                console.log('Cloudinary upload success:', result.secure_url);
                 resolve(result);
               } else {
+                console.error('Cloudinary upload error:', error);
                 reject(error);
               }
             }
@@ -48,21 +52,24 @@ router.post('/', upload.single('image'), async (req, res) => {
       };
 
       const result = await uploadFromBuffer(req.file.buffer);
-      imageUrl = result.secure_url;
+      finalImageUrl = result.secure_url;
+    } else {
+      console.log('No file uploaded, using provided imageUrl:', finalImageUrl);
     }
 
     const newProduct = new Product({
       name,
       description,
       price: Number(price),
-      imageUrl
+      imageUrl: finalImageUrl
     });
 
     const savedProduct = await newProduct.save();
+    console.log('Product saved successfully:', savedProduct._id);
     res.status(201).json(savedProduct);
   } catch (err) {
     console.error('Error in POST /api/products:', err);
-    res.status(500).json({ message: 'Error adding product' });
+    res.status(500).json({ message: 'Error adding product', error: err.message });
   }
 });
 

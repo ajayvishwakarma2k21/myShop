@@ -6,6 +6,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
+// Helper to strip accidental quotes from environment variables
+const clean = (val) => val ? val.replace(/^["'](.+)["']$/, '$1') : val;
+
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
@@ -13,7 +16,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import productRoutes from './routes/productRoutes.js';
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = clean(process.env.PORT) || 5000;
 
 // Middleware
 const allowedOrigins = [

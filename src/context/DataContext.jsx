@@ -4,16 +4,11 @@ const DataContext = createContext();
 
 export const useData = () => useContext(DataContext);
 
-// Set your backend API URL here using Vite environment variables
-const getApiUrl = () => {
-  const envUrl = import.meta.env.VITE_API_BASE_URL;
-  if (envUrl) return envUrl;
-  
-  // Default to localhost for development if not provided
-  return 'http://localhost:5000/api/products';
-};
+// Helper to strip accidental quotes from environment variables
+const clean = (val) => val ? val.replace(/^["'](.+)["']$/, '$1') : val;
 
-const API_URL = getApiUrl();
+// Set your backend API URL here using Vite environment variables
+const API_URL = clean(import.meta.env.VITE_API_BASE_URL) || 'http://localhost:5000/api/products';
 
 export const DataProvider = ({ children }) => {
   const [products, setProducts] = useState([]);

@@ -27,6 +27,7 @@ const Admin = () => {
     e.preventDefault();
     if (!formData.name || !formData.price) return;
     
+    console.log('Submitting new post with category:', formData.category);
     setIsSubmitting(true);
     await addProduct(formData, imageFile);
     setFormData({ name: '', price: '', description: '', category: 'general' });
@@ -161,34 +162,43 @@ const Admin = () => {
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
               <h2 style={{ fontSize: '1.75rem', marginBottom: '2rem', fontFamily: 'Cinzel, serif', border: 'none' }}>Create New Post</h2>
               
-              <div className="flex gap-4" style={{ marginBottom: '2.5rem', background: '#f8f9fa', padding: '0.5rem', borderRadius: '12px', border: '1px solid #eee' }}>
-                <button 
-                  type="button"
-                  onClick={() => setFormData(prev => ({ ...prev, category: 'general' }))}
-                  style={{ 
-                    flex: 1, padding: '1rem', borderRadius: '8px', border: 'none', cursor: 'pointer',
-                    background: formData.category === 'general' ? 'var(--royal-maroon)' : 'transparent',
-                    color: formData.category === 'general' ? 'white' : 'var(--text-secondary)',
-                    fontWeight: 600, transition: 'all 0.3s'
-                  }}
-                >
-                  General Item
-                </button>
-                <button 
-                  type="button"
-                  onClick={() => setFormData(prev => ({ ...prev, category: 'parlour' }))}
-                  style={{ 
-                    flex: 1, padding: '1rem', borderRadius: '8px', border: 'none', cursor: 'pointer',
-                    background: formData.category === 'parlour' ? 'var(--royal-maroon)' : 'transparent',
-                    color: formData.category === 'parlour' ? 'white' : 'var(--text-secondary)',
-                    fontWeight: 600, transition: 'all 0.3s'
-                  }}
-                >
-                  Parlour Service
-                </button>
-              </div>
-
               <form onSubmit={handleSubmit} className="flex-col gap-6" style={{ maxWidth: '700px' }}>
+                <div className="form-group" style={{ marginBottom: '2rem' }}>
+                  <label className="form-label" style={{ fontWeight: 600, marginBottom: '1rem', display: 'block', color: 'var(--royal-maroon)', fontFamily: 'Marcellus, serif' }}>
+                    What are you adding to the collection?
+                  </label>
+                  <div className="flex gap-4 p-1 bg-gray-100 rounded-xl border border-gray-200" style={{ marginBottom: '1rem' }}>
+                    <button 
+                      type="button"
+                      onClick={() => setFormData(prev => ({ ...prev, category: 'general' }))}
+                      style={{ 
+                        flex: 1, padding: '1rem', borderRadius: '10px', border: 'none', cursor: 'pointer',
+                        background: formData.category === 'general' ? 'var(--royal-maroon)' : 'transparent',
+                        color: formData.category === 'general' ? 'white' : 'var(--text-secondary)',
+                        fontWeight: 600, transition: 'all 0.3s',
+                        boxShadow: formData.category === 'general' ? '0 4px 15px rgba(61, 12, 12, 0.2)' : 'none'
+                      }}
+                    >
+                      Jewelry Treasure
+                    </button>
+                    <button 
+                      type="button"
+                      onClick={() => setFormData(prev => ({ ...prev, category: 'parlour' }))}
+                      style={{ 
+                        flex: 1, padding: '1rem', borderRadius: '10px', border: 'none', cursor: 'pointer',
+                        background: formData.category === 'parlour' ? 'var(--royal-maroon)' : 'transparent',
+                        color: formData.category === 'parlour' ? 'white' : 'var(--text-secondary)',
+                        fontWeight: 600, transition: 'all 0.3s',
+                        boxShadow: formData.category === 'parlour' ? '0 4px 15px rgba(61, 12, 12, 0.2)' : 'none'
+                      }}
+                    >
+                      Parlour Service
+                    </button>
+                  </div>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontStyle: 'italic' }}>
+                    Currently selected: <strong style={{ color: 'var(--royal-maroon)' }}>{formData.category === 'parlour' ? 'Beauty Parlour Service' : 'General Jewelry Item'}</strong>
+                  </p>
+                </div>
                 <div className="form-group" style={{ marginBottom: '1.5rem' }}>
                   <label className="form-label" style={{ fontWeight: 600, marginBottom: '0.5rem', display: 'block', color: 'var(--royal-maroon)', fontFamily: 'Marcellus, serif' }}>
                     {formData.category === 'parlour' ? 'Service Name' : 'Item Name'}

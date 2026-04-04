@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import Admin from './pages/Admin';
 import AdminLogin from './pages/AdminLogin';
+import Parlour from './pages/Parlour';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -31,6 +32,7 @@ function App() {
               <main className="flex-grow">
                 <Routes>
                   <Route path="/" element={<Home />} />
+                  <Route path="/parlour" element={<Parlour />} />
                   <Route path="/admin-login" element={<AdminLogin />} />
                   <Route 
                     path="/admin" 

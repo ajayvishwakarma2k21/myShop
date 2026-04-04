@@ -21,6 +21,7 @@ const Navbar = () => {
 
   const navLinks = [
     { name: t('common.heritage'), path: '/' },
+    { name: 'Beauty Parlour', path: '/parlour' },
   ];
 
   if (isAdmin) {

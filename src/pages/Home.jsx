@@ -10,6 +10,9 @@ const Home = () => {
   const { products, loading } = useData();
   const { t } = useLanguage();
 
+  // Filter for general treasures (or items with no category yet)
+  const generalProducts = products ? products.filter(p => !p.category || p.category === 'general') : [];
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen" style={{ background: 'var(--bg-color)' }}>
@@ -86,9 +89,9 @@ const Home = () => {
           </motion.p>
         </div>
         
-        {products && products.length > 0 ? (
+        {generalProducts && generalProducts.length > 0 ? (
           <div className="products-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '2rem' }}>
-            {products.map((product, idx) => (
+            {generalProducts.map((product, idx) => (
               <motion.div
                 key={product.id || idx}
                 initial={{ opacity: 0, y: 20 }}

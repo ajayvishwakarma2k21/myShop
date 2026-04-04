@@ -26,7 +26,7 @@ router.get('/', async (req, res) => {
 // @desc    Create a product with image upload or direct URL
 router.post('/', upload.single('image'), async (req, res) => {
   try {
-    const { name, description, price, imageUrl: bodyImageUrl } = req.body;
+    const { name, description, price, imageUrl: bodyImageUrl, category } = req.body;
     let finalImageUrl = bodyImageUrl || '';
 
     // If a file was uploaded, prioritize Cloudinary
@@ -61,7 +61,8 @@ router.post('/', upload.single('image'), async (req, res) => {
       name,
       description,
       price: Number(price),
-      imageUrl: finalImageUrl
+      imageUrl: finalImageUrl,
+      category: category || 'general'
     });
 
     const savedProduct = await newProduct.save();

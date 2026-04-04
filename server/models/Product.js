@@ -17,6 +17,11 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  category: {
+    type: String,
+    enum: ['general', 'parlour'],
+    default: 'general'
+  },
   createdAt: {
     type: Date,
     default: Date.now

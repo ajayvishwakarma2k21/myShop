@@ -2,7 +2,7 @@ import React from 'react';
 import { useData } from '../context/DataContext';
 import { useLanguage } from '../context/LanguageContext';
 import { motion } from 'framer-motion';
-import { Scissor, Sparkles, Star, Clock, CheckCircle2 } from 'lucide-react';
+import { Scissors, Sparkles, Star, CheckCircle2 } from 'lucide-react';
 
 const Parlour = () => {
   const { products, loading } = useData();
@@ -115,7 +115,7 @@ const Parlour = () => {
             </motion.div>
           ) : (
             <div className="text-center py-20 bg-white rounded-2xl border-2 border-dashed border-gray-200">
-              <Scissor size={60} className="mx-auto text-gray-300 mb-4" />
+              <Scissors size={60} className="mx-auto text-gray-300 mb-4" />
               <h3 className="text-xl font-bold text-gray-400 mb-2" style={{ fontFamily: 'Cinzel, serif' }}>No Services Listed</h3>
               <p className="text-gray-500" style={{ fontFamily: 'Marcellus, serif' }}>Check back soon for our royal beauty offerings.</p>
             </div>

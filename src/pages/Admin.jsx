@@ -27,6 +27,7 @@ const Admin = () => {
     e.preventDefault();
     if (!formData.name || !formData.price) return;
     
+    alert(`Enshrining "${formData.name}" into the vault as a ${formData.category.toUpperCase()} item...`);
     console.log('Submitting new post with category:', formData.category);
     setIsSubmitting(true);
     await addProduct(formData, imageFile);

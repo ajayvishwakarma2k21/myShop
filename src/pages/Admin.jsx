@@ -8,7 +8,7 @@ const Admin = () => {
   const [activeTab, setActiveTab] = useState('inventory');
   
   // Form State
-  const [formData, setFormData] = useState({ name: '', price: '', description: '', category: 'general' });
+  const [formData, setFormData] = useState({ name: '', price: '', description: '' });
   const [imageFile, setImageFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -27,11 +27,9 @@ const Admin = () => {
     e.preventDefault();
     if (!formData.name || !formData.price) return;
     
-    alert(`Enshrining "${formData.name}" into the vault as a ${formData.category.toUpperCase()} item...`);
-    console.log('Submitting new post with category:', formData.category);
     setIsSubmitting(true);
     await addProduct(formData, imageFile);
-    setFormData({ name: '', price: '', description: '', category: 'general' });
+    setFormData({ name: '', price: '', description: '' });
     setImageFile(null);
     setIsSubmitting(false);
     setActiveTab('inventory');
@@ -62,7 +60,7 @@ const Admin = () => {
               style={{ textAlign: 'left', background: activeTab === 'add' ? 'var(--antique-gold)' : 'transparent', border: 'none', cursor: 'pointer', color: 'white', fontFamily: 'Marcellus, serif' }}
             >
               <PlusCircle size={20} />
-              Add New post
+              Add New Treasure
             </button>
           </div>
         </aside>
@@ -91,8 +89,7 @@ const Admin = () => {
                   <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                     <thead>
                       <tr style={{ borderBottom: '2px solid var(--antique-gold)', background: 'rgba(212, 175, 55, 0.05)' }}>
-                        <th style={{ padding: '1.25rem', fontFamily: 'Cinzel, serif', fontSize: '0.8rem', letterSpacing: '0.1em' }}>TREASURE / SERVICE</th>
-                        <th style={{ padding: '1.25rem', fontFamily: 'Cinzel, serif', fontSize: '0.8rem', letterSpacing: '0.1em' }}>CATEGORY</th>
+                        <th style={{ padding: '1.25rem', fontFamily: 'Cinzel, serif', fontSize: '0.8rem', letterSpacing: '0.1em' }}>TREASURE</th>
                         <th style={{ padding: '1.25rem', fontFamily: 'Cinzel, serif', fontSize: '0.8rem', letterSpacing: '0.1em' }}>VALUATION</th>
                         <th style={{ padding: '1.25rem', fontFamily: 'Cinzel, serif', fontSize: '0.8rem', letterSpacing: '0.1em' }}>ACTIONS</th>
                       </tr>
@@ -114,20 +111,6 @@ const Admin = () => {
                                 </div>
                               </div>
                             </div>
-                          </td>
-                          <td style={{ padding: '1.25rem' }}>
-                            <span style={{ 
-                              padding: '0.25rem 0.75rem', 
-                              borderRadius: '1rem', 
-                              fontSize: '0.75rem', 
-                              fontWeight: 600,
-                              textTransform: 'uppercase',
-                              background: product.category === 'parlour' ? 'rgba(255, 105, 180, 0.1)' : 'rgba(212, 175, 55, 0.1)',
-                              color: product.category === 'parlour' ? '#ff1493' : 'var(--antique-gold)',
-                              border: `1px solid ${product.category === 'parlour' ? '#ff69b4' : 'var(--antique-gold)'}`
-                            }}>
-                              {product.category || 'general'}
-                            </span>
                           </td>
                           <td style={{ padding: '1.25rem', fontWeight: 600, fontFamily: 'Marcellus, serif', fontSize: '1.1rem' }}>₹{Number(product.price).toLocaleString('en-IN')}</td>
                           <td style={{ padding: '1.25rem' }}>
@@ -161,56 +144,17 @@ const Admin = () => {
 
           {activeTab === 'add' && (
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
-              <h2 style={{ fontSize: '1.75rem', marginBottom: '2rem', fontFamily: 'Cinzel, serif', border: 'none' }}>Create New Post</h2>
-              
+              <h2 style={{ fontSize: '1.75rem', marginBottom: '2rem', fontFamily: 'Cinzel, serif', border: 'none' }}>Add New Treasure</h2>
               <form onSubmit={handleSubmit} className="flex-col gap-6" style={{ maxWidth: '700px' }}>
-                <div className="form-group" style={{ marginBottom: '2rem' }}>
-                  <label className="form-label" style={{ fontWeight: 600, marginBottom: '1rem', display: 'block', color: 'var(--royal-maroon)', fontFamily: 'Marcellus, serif' }}>
-                    What are you adding to the collection?
-                  </label>
-                  <div className="flex gap-4 p-1 bg-gray-100 rounded-xl border border-gray-200" style={{ marginBottom: '1rem' }}>
-                    <button 
-                      type="button"
-                      onClick={() => setFormData(prev => ({ ...prev, category: 'general' }))}
-                      style={{ 
-                        flex: 1, padding: '1rem', borderRadius: '10px', border: 'none', cursor: 'pointer',
-                        background: formData.category === 'general' ? 'var(--royal-maroon)' : 'transparent',
-                        color: formData.category === 'general' ? 'white' : 'var(--text-secondary)',
-                        fontWeight: 600, transition: 'all 0.3s',
-                        boxShadow: formData.category === 'general' ? '0 4px 15px rgba(61, 12, 12, 0.2)' : 'none'
-                      }}
-                    >
-                      Jewelry Treasure
-                    </button>
-                    <button 
-                      type="button"
-                      onClick={() => setFormData(prev => ({ ...prev, category: 'parlour' }))}
-                      style={{ 
-                        flex: 1, padding: '1rem', borderRadius: '10px', border: 'none', cursor: 'pointer',
-                        background: formData.category === 'parlour' ? 'var(--royal-maroon)' : 'transparent',
-                        color: formData.category === 'parlour' ? 'white' : 'var(--text-secondary)',
-                        fontWeight: 600, transition: 'all 0.3s',
-                        boxShadow: formData.category === 'parlour' ? '0 4px 15px rgba(61, 12, 12, 0.2)' : 'none'
-                      }}
-                    >
-                      Parlour Service
-                    </button>
-                  </div>
-                  <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontStyle: 'italic' }}>
-                    Currently selected: <strong style={{ color: 'var(--royal-maroon)' }}>{formData.category === 'parlour' ? 'Beauty Parlour Service' : 'General Jewelry Item'}</strong>
-                  </p>
-                </div>
                 <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-                  <label className="form-label" style={{ fontWeight: 600, marginBottom: '0.5rem', display: 'block', color: 'var(--royal-maroon)', fontFamily: 'Marcellus, serif' }}>
-                    {formData.category === 'parlour' ? 'Service Name' : 'Item Name'}
-                  </label>
+                  <label className="form-label" style={{ fontWeight: 600, marginBottom: '0.5rem', display: 'block', color: 'var(--royal-maroon)', fontFamily: 'Marcellus, serif' }}>Item Name</label>
                   <input 
                     type="text" 
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
                     className="input-field" 
-                    placeholder={formData.category === 'parlour' ? "e.g. Bridal Makeup" : "e.g. Maharani Polki Necklace"}
+                    placeholder="e.g. Maharani Polki Necklace"
                     required
                   />
                 </div>
@@ -230,15 +174,13 @@ const Admin = () => {
                 </div>
                 
                 <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-                  <label className="form-label" style={{ fontWeight: 600, marginBottom: '0.5rem', display: 'block', color: 'var(--royal-maroon)', fontFamily: 'Marcellus, serif' }}>
-                    {formData.category === 'parlour' ? 'Service Details' : 'Provenance & Details'}
-                  </label>
+                  <label className="form-label" style={{ fontWeight: 600, marginBottom: '0.5rem', display: 'block', color: 'var(--royal-maroon)', fontFamily: 'Marcellus, serif' }}>Provenance & Details</label>
                   <textarea 
                     name="description"
                     value={formData.description}
                     onChange={handleInputChange}
                     className="input-field" 
-                    placeholder={formData.category === 'parlour' ? "Describe the service, products used, and styling tips..." : "Describe the craftsmanship and history..."}
+                    placeholder="Describe the craftsmanship and history..."
                     rows="5"
                     style={{ resize: 'vertical' }}
                     required
@@ -246,11 +188,11 @@ const Admin = () => {
                 </div>
 
                 <div className="form-group" style={{ marginBottom: '2rem' }}>
-                  <label className="form-label" style={{ fontWeight: 600, marginBottom: '0.5rem', display: 'block', color: 'var(--royal-maroon)', fontFamily: 'Marcellus, serif' }}>Visual Representation</label>
+                  <label className="form-label" style={{ fontWeight: 600, marginBottom: '0.5rem', display: 'block', color: 'var(--royal-maroon)', fontFamily: 'Marcellus, serif' }}>Masterpiece Visual</label>
                   <label className="file-upload w-full flex flex-col items-center justify-center" style={{ border: '2px dashed var(--antique-gold)', borderRadius: '8px', padding: '3rem', cursor: 'pointer', background: 'rgba(212, 175, 55, 0.05)' }}>
                     <UploadCloud className="file-upload-icon" style={{ color: 'var(--antique-gold)', marginBottom: '1rem' }} />
                     <span style={{ color: 'var(--text-primary)', fontWeight: 500, fontFamily: 'Marcellus, serif' }}>
-                      {imageFile ? imageFile.name : `Upload ${formData.category === 'parlour' ? 'service' : 'treasure'} visual`}
+                      {imageFile ? imageFile.name : 'Upload the visual for this treasure'}
                     </span>
                     <input 
                       type="file" 
@@ -266,10 +208,10 @@ const Admin = () => {
                     Return
                   </button>
                    <button type="submit" className="btn-primary flex items-center gap-2 justify-center" disabled={isSubmitting} style={{ flex: 2 }}>
-                    {isSubmitting ? 'Recording...' : (
+                    {isSubmitting ? 'Recording in Vault...' : (
                       <>
                         <PlusCircle size={18} />
-                        {formData.category === 'parlour' ? 'Add Service' : 'Enshrine Treasure'}
+                        Enshrine Treasure
                       </>
                     )}
                   </button>

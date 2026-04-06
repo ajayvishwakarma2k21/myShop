@@ -10,9 +10,6 @@ const Home = () => {
   const { products, loading } = useData();
   const { t } = useLanguage();
 
-  // Filter for general treasures (or items with no category yet)
-  const generalProducts = products ? products.filter(p => !p.category || p.category === 'general') : [];
-
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen" style={{ background: 'var(--bg-color)' }}>
@@ -28,7 +25,7 @@ const Home = () => {
   return (
     <div className="animate-fade-in">
       {/* Hero Section */}
-      <section className="hero" style={{ backgroundImage: `url(${heroImage})` }}>
+      <section className="hero flex items-center justify-center" style={{ backgroundImage: `url(${heroImage})` }}>
         <div className="container hero-content">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -56,6 +53,7 @@ const Home = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.9 }}
+              className="mt-8"
             >
               <button className="btn-primary" onClick={() => document.getElementById('products-section').scrollIntoView({ behavior: 'smooth' })}>
                 {t('hero.explore_btn')}
@@ -69,8 +67,8 @@ const Home = () => {
       <div className="jali-spacer"></div>
 
       {/* Products Section */}
-      <section id="products-section" className="container" style={{ paddingBottom: '6rem' }}>
-        <div className="page-header">
+      <section id="products-section" className="container section-py">
+        <div className="page-header text-center">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -89,9 +87,9 @@ const Home = () => {
           </motion.p>
         </div>
         
-        {generalProducts && generalProducts.length > 0 ? (
-          <div className="products-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '2rem' }}>
-            {generalProducts.map((product, idx) => (
+        {products && products.length > 0 ? (
+          <div className="products-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 'clamp(1rem, 3vw, 2.5rem)' }}>
+            {products.map((product, idx) => (
               <motion.div
                 key={product.id || idx}
                 initial={{ opacity: 0, y: 20 }}
@@ -104,7 +102,7 @@ const Home = () => {
             ))}
           </div>
         ) : (
-          <div className="empty-state">
+          <div className="empty-state text-center">
             <PackageOpen className="empty-state-icon mx-auto" style={{ width: '4rem', height: '4rem', display: 'block', color: 'var(--antique-gold)' }} />
             <h3>{t('products.empty_title')}</h3>
             <p>{t('products.empty_p')}</p>
@@ -117,21 +115,22 @@ const Home = () => {
 
       {/* Contact Section */}
       <section className="contact-section">
-        <div className="container grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '4rem', alignItems: 'center' }}>
+        <div className="container section-py grid responsive-grid-2 items-center">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h3 style={{ fontSize: '2.5rem', fontFamily: 'Cinzel, serif', marginBottom: '1.5rem', border: 'none' }}>{t('contact.title')}</h3>
-            <p style={{ fontSize: '1.1rem', lineHeight: '1.8', marginBottom: '2rem' }}>
+            <h3 style={{ fontFamily: 'Cinzel, serif', marginBottom: '1.5rem' }}>{t('contact.title')}</h3>
+            <p style={{ lineHeight: '1.8', marginBottom: '2rem' }}>
               {t('contact.p')}
             </p>
             <ul className="footer-links" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>
-              <li className="mb-4"><strong>{t('contact.gallery')}:</strong> {t('contact.gallery_address')}</li>
-              <li className="mb-4"><strong>{t('contact.phone')}:</strong> +91 141 234 5678</li>
-              <li><strong>{t('contact.mail')}:</strong> heritage@rajputanajewels.com</li>
+              <li className="mb-4"><strong>{t('contact.gallery')} (RJ):</strong> {t('contact.address_1')}</li>
+              <li className="mb-4"><strong>{t('contact.gallery')} (MP):</strong> {t('contact.address_2')}</li>
+              <li className="mb-4"><strong>{t('contact.phone')}:</strong> +91 8305162007, +91 9549453212</li>
+              <li><strong>{t('contact.mail')}:</strong> contact@vishwakarmacollections.com</li>
             </ul>
           </motion.div>
 

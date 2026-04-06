@@ -1,16 +1,16 @@
 export const translations = {
   en: {
     common: {
-      brand_name: "Rajputana Jewels",
-      entrance: "Entrance",
+      brand_name: "Vishwakarma Collections",
+      entrance: "Sign In",
       admin: "Admin",
       admin_hub: "Admin Hub",
-      heritage: "Heritage",
-      logout: "Log Out",
+      heritage: "Home",
+      logout: "Sign Out",
     },
     hero: {
-      title: "The Legacy of Rajasthan",
-      subtitle: "Discover an exquisite collection of handcrafted Kundan and Polki jewelry, preserving the royal heritage and timeless elegance of traditional Indian artistry.",
+      title: "Everything You Love, In One Place",
+      subtitle: "Premium jewelry, fashionable clothing, and beautiful women’s accessories — all curated for you.",
       explore_btn: "Explore Collection",
     },
     products: {
@@ -28,7 +28,8 @@ export const translations = {
       message_placeholder: "Tell us about the treasure you desire...",
       submit_btn: "Send Inquiry",
       gallery: "Gallery",
-      gallery_address: "Pink City, Jaipur, Rajasthan",
+      address_1: "Unkhali Village, Tehsil: Jhalrapatan, District: Jhalawar, Rajasthan — 326023, India",
+      address_2: "Village Ganeshpura, Tehsil: Susner, District: Agar Malwa, Madhya Pradesh — 465447, India",
       phone: "Phone",
       mail: "Email",
     },
@@ -50,7 +51,7 @@ export const translations = {
   },
   hi: {
     common: {
-      brand_name: "राजपूताना ज्वेल्स",
+      brand_name: "विश्वकर्मा कलेक्शंस",
       entrance: "प्रवेश",
       admin: "एडमिन",
       admin_hub: "एडमिन हब",
@@ -58,8 +59,8 @@ export const translations = {
       logout: "लॉग आउट",
     },
     hero: {
-      title: "राजस्थान की विरासत",
-      subtitle: "पारंपरिक भारतीय कलात्मकता की शाही विरासत और कालातीत सुंदरता को संरक्षित करते हुए, हस्तनिर्मित कुंदन और पोलकी गहनों के उत्कृष्ट संग्रह की खोज करें।",
+      title: "आपकी हर मनपसंद चीज़, एक ही जगह पर",
+      subtitle: "प्रीमियम ज्वेलरी, फैशनेबल कपड़े और खूबसूरत महिलाओं के एक्सेसरीज़ — सब कुछ खास आपके लिए चुना गया है।",
       explore_btn: "संग्रह देखें",
     },
     products: {
@@ -77,7 +78,8 @@ export const translations = {
       message_placeholder: "हमें उस खजाने के बारे में बताएं जो आप चाहते हैं...",
       submit_btn: "पूछताछ भेजें",
       gallery: "गैलरी",
-      gallery_address: "पिंक सिटी, जयपुर, राजस्थान",
+      address_1: "गाँव उणखली, तहसील: झालरापाटन, जिला: झालावाड़, राजस्थान — 326023, भारत",
+      address_2: "गाँव गणेशपुरा, तहसील: सुसनेर, जिला: आगर मालवा, मध्य प्रदेश — 465447, भारत",
       phone: "फोन",
       mail: "ईमेल",
     },

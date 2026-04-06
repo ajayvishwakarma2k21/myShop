@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
-import { Sparkles, User, LogIn, LogOut, Menu, X, ShieldCheck, Languages } from 'lucide-react';
+import { User, LogIn, LogOut, Menu, X, ShieldCheck, Languages } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import logo3d from '../assets/logo-3d.png';
 
 const Navbar = () => {
-  const { currentUser, isAdmin, signInWithGoogle, logOut } = useAuth();
+  const { currentUser, signInWithGoogle, logOut } = useAuth();
   const { language, toggleLanguage, t } = useLanguage();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -19,82 +20,85 @@ const Navbar = () => {
     }
   };
 
-  const navLinks = [
-    { name: t('common.heritage'), path: '/' },
-    { name: 'Beauty Parlour', path: '/parlour' },
-  ];
-
-  if (isAdmin) {
-    navLinks.push({ name: t('common.admin_hub'), path: '/admin' });
-  }
-
   return (
     <nav className="navbar">
       <div className="container nav-container">
-        <Link to="/" className="nav-brand">
-          <Sparkles size={28} className="text-antique-gold" style={{ color: 'var(--antique-gold)' }} />
-          <span>{t('common.brand_name')}</span>
-        </Link>
-
-        {/* Desktop Navigation */}
-        <div className="nav-links flex items-center">
-          <div className="flex gap-8 items-center mr-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`nav-link ${location.pathname === link.path ? 'active' : ''}`}
-              >
-                {link.name}
-              </Link>
-            ))}
-          </div>
-          
-          <div className="flex items-center gap-4" style={{ paddingLeft: '2rem', borderLeft: '1px solid var(--border-color)' }}>
-            {/* Language Toggle */}
-            <button 
-              onClick={toggleLanguage}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full transition-all border border-antique-gold/30 hover:bg-antique-gold/10"
-              style={{ fontFamily: 'Marcellus, serif', fontSize: '0.8rem', color: 'var(--royal-maroon)' }}
-            >
-              <Languages size={14} className="text-antique-gold" />
-              <span>{language === 'en' ? 'हिंदी' : 'English'}</span>
-            </button>
-
-            {currentUser ? (
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <User size={20} className="text-antique-gold" style={{ color: 'var(--antique-gold)' }} />
-                  <span className="text-sm font-medium" style={{ color: 'var(--text-primary)', fontFamily: 'Marcellus, serif' }}>
-                    {currentUser.displayName || currentUser.email.split('@')[0]}
-                  </span>
-                </div>
-                <button onClick={logOut} className="btn-icon" title={t('common.logout')}>
-                  <LogOut size={20} />
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-3">
-                <button onClick={handleLogin} className="btn-primary flex items-center gap-2" style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem' }}>
-                  <LogIn size={16} />
-                  <span>{t('common.entrance')}</span>
-                </button>
-                <Link to="/admin-login" className="btn-secondary flex items-center gap-2" style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem' }}>
-                  <ShieldCheck size={16} />
-                  <span>{t('common.admin')}</span>
-                </Link>
-              </div>
-            )}
-          </div>
+        {/* Left: 3D Round Golden Logo */}
+        <div className="nav-brand">
+          <Link to="/">
+            <motion.img 
+              src={logo3d} 
+              alt="Vishwakarma Collections" 
+              className="logo-navbar"
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              whileTap={{ scale: 0.95 }}
+            />
+          </Link>
         </div>
 
-        {/* Mobile menu button */}
-        <button 
-          className="btn-icon mobile-menu-btn" 
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {/* Center: Home & Language (Desktop Only via CSS) */}
+        <div className="nav-links">
+          <Link
+            to="/"
+            className={`nav-link heritage ${location.pathname === '/' ? 'active' : ''}`}
+          >
+            {t('common.heritage')}
+          </Link>
+
+          <button 
+            onClick={toggleLanguage}
+            className="lang-switch-3d"
+          >
+            <Languages size={18} className="text-royal-maroon" />
+            <span className="font-bold">{language === 'en' ? '🌐 हिंदी' : '🌐 English'}</span>
+          </button>
+        </div>
+
+        {/* Right Actions: Entry/Exit & Admin */}
+        <div className="nav-actions">
+          {currentUser ? (
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 px-3 py-1 bg-white/30 rounded-xl backdrop-blur-md border border-white/20">
+                <User size={18} className="text-royal-maroon" />
+                <span className="text-sm font-bold text-royal-maroon btn-label-responsive" style={{ fontFamily: 'Marcellus, serif' }}>
+                  {currentUser.displayName?.split(' ')[0] || 'Member'}
+                </span>
+              </div>
+              
+              <button 
+                onClick={logOut} 
+                className="btn-maroon-3d"
+                title={t('common.logout')}
+                style={{ background: 'var(--error-color)' }}
+              >
+                <LogOut size={18} />
+                <span className="btn-label-responsive">{t('common.logout')}</span>
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-3">
+              <button onClick={handleLogin} className="btn-maroon-3d">
+                <LogIn size={18} />
+                <span className="btn-label-responsive">{t('common.entrance')}</span>
+              </button>
+              
+              <Link to="/admin-login">
+                <button className="btn-gold-3d">
+                  <ShieldCheck size={18} />
+                  <span className="btn-label-responsive">{t('common.admin')}</span>
+                </button>
+              </Link>
+            </div>
+          )}
+
+          {/* Mobile menu trigger */}
+          <button 
+            className="hamburger-3d" 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Navigation */}
@@ -105,56 +109,46 @@ const Navbar = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             className="mobile-nav-menu"
-            style={{ 
-              position: 'absolute', top: '100%', left: 0, right: 0, 
-              background: 'var(--surface-color)', padding: '1.5rem', 
-              borderBottom: '2px solid var(--antique-gold)', 
-              display: 'flex', flexDirection: 'column', gap: '1rem',
-              boxShadow: 'var(--shadow-subtle)',
-              zIndex: 90
-            }}
           >
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`nav-link ${location.pathname === link.path ? 'active' : ''}`}
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {link.name}
-              </Link>
-            ))}
+            <Link
+              to="/"
+              className="nav-link heritage text-center py-2"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              {t('common.heritage')}
+            </Link>
             
-            {/* Mobile Language Toggle */}
             <button 
               onClick={() => { toggleLanguage(); setIsMobileMenuOpen(false); }}
-              className="flex items-center justify-center gap-2 w-full p-3 rounded-md border border-antique-gold/30 bg-antique-gold/5"
-              style={{ fontFamily: 'Marcellus, serif', color: 'var(--royal-maroon)' }}
+              className="lang-switch-3d justify-center py-2"
             >
               <Languages size={18} />
-              <span>{language === 'en' ? 'हिंदी में बदलें' : 'Switch to English'}</span>
+              <span>{language === 'en' ? 'हिंदी में बदलें' : 'English'}</span>
             </button>
 
-            <div style={{ paddingTop: '1rem', borderTop: '1px solid var(--border-color)' }}>
+            <div style={{ paddingTop: '1rem', borderTop: '1px solid rgba(0,0,0,0.1)' }}>
               {currentUser ? (
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <User size={20} className="text-antique-gold" style={{ color: 'var(--antique-gold)' }} />
-                    <span style={{ fontFamily: 'Marcellus, serif' }}>{currentUser.displayName || currentUser.email}</span>
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center justify-center gap-3 p-3 bg-white/50 rounded-lg">
+                    <User size={20} className="text-antique-gold" />
+                    <span className="font-bold">{currentUser.displayName || currentUser.email}</span>
                   </div>
-                  <button onClick={() => { logOut(); setIsMobileMenuOpen(false); }} className="btn-icon" style={{ color: 'var(--error-color)' }}>
-                    <LogOut size={20} />
+                  <button onClick={() => { logOut(); setIsMobileMenuOpen(false); }} className="btn-maroon-3d justify-center w-full" style={{ background: 'var(--error-color)' }}>
+                    <LogOut size={18} />
+                    <span>{t('common.logout')}</span>
                   </button>
                 </div>
               ) : (
                 <div className="flex flex-col gap-3">
-                  <button onClick={() => { handleLogin(); setIsMobileMenuOpen(false); }} className="btn-primary w-full flex items-center justify-center gap-2">
+                  <button onClick={() => { handleLogin(); setIsMobileMenuOpen(false); }} className="btn-maroon-3d justify-center w-full">
                     <LogIn size={18} />
                     <span>{t('common.entrance')}</span>
                   </button>
-                  <Link to="/admin-login" onClick={() => setIsMobileMenuOpen(false)} className="btn-secondary w-full flex items-center justify-center gap-2">
-                    <ShieldCheck size={18} />
-                    <span>{t('common.admin')}</span>
+                  <Link to="/admin-login" onClick={() => setIsMobileMenuOpen(false)}>
+                    <button className="btn-gold-3d w-full justify-center">
+                      <ShieldCheck size={18} />
+                      <span>{t('common.admin')}</span>
+                    </button>
                   </Link>
                 </div>
               )}

@@ -26,20 +26,12 @@ router.get('/', async (req, res) => {
 // @desc    Create a product with image upload or direct URL
 router.post('/', upload.single('image'), async (req, res) => {
   try {
-    console.log('--- NEW PRODUCT UPLOAD ATTEMPT ---');
-    console.log('Full Request Body:', req.body);
-    
     const { name, description, price, imageUrl: bodyImageUrl } = req.body;
-    // Robust category check
-    const rawCategory = req.body.category || req.body.itemCategory || 'general';
-    const finalCategory = String(rawCategory).trim().toLowerCase();
-    
-    console.log('Resolved Final Category:', finalCategory);
     let finalImageUrl = bodyImageUrl || '';
 
     // If a file was uploaded, prioritize Cloudinary
     if (req.file) {
-      console.log('File detected for:', name);
+      console.log('Incoming file upload for:', name);
       // Helper function to upload to Cloudinary via stream
       const uploadFromBuffer = (fileBuffer) => {
         return new Promise((resolve, reject) => {
@@ -47,9 +39,10 @@ router.post('/', upload.single('image'), async (req, res) => {
             { folder: 'shop_products' },
             (error, result) => {
               if (result) {
-                console.log('Cloudinary success for category:', finalCategory);
+                console.log('Cloudinary upload success:', result.secure_url);
                 resolve(result);
               } else {
+                console.error('Cloudinary upload error:', error);
                 reject(error);
               }
             }
@@ -60,14 +53,15 @@ router.post('/', upload.single('image'), async (req, res) => {
 
       const result = await uploadFromBuffer(req.file.buffer);
       finalImageUrl = result.secure_url;
+    } else {
+      console.log('No file uploaded, using provided imageUrl:', finalImageUrl);
     }
 
     const newProduct = new Product({
       name,
       description,
       price: Number(price),
-      imageUrl: finalImageUrl,
-      category: finalCategory
+      imageUrl: finalImageUrl
     });
 
     const savedProduct = await newProduct.save();

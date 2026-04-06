@@ -48,10 +48,6 @@ export const DataProvider = ({ children }) => {
       formData.append('description', productData.description);
       formData.append('price', productData.price);
       
-      const cleanCategory = String(productData.category || 'general').trim().toLowerCase();
-      formData.append('category', cleanCategory);
-      console.log('FormData Category Appended:', cleanCategory);
-      
       if (imageFile) {
         formData.append('image', imageFile);
       } else if (productData.imageUrl) {
